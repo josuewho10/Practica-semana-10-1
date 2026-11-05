@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <title>Seguimiento de proyectos de investigación</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Inicio">
+      <span class="brand-mark">I</span>
+      <span>Observatorio <small>de investigación</small></span>
+    </a>
+    <span class="top-note"><span class="live-dot"></span> Panel de seguimiento</span>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">GESTIÓN ACADÉMICA · 2026</p>
+        <h1>Proyectos de investigación</h1>
+        <p class="subtitle">Organiza iniciativas, responsables y avances desde un solo lugar.</p>
+      </div>
+      <button class="button button-primary" id="new-project" type="button"><span aria-hidden="true">＋</span> Nuevo proyecto</button>
+    </section>
+
+    <section class="summary" aria-label="Resumen de proyectos">
+      <article class="summary-card"><span class="summary-icon indigo">▤</span><div><span class="summary-label">Proyectos registrados</span><strong id="total-count">—</strong></div></article>
+      <article class="summary-card"><span class="summary-icon teal">◷</span><div><span class="summary-label">En ejecución</span><strong id="active-count">—</strong></div></article>
+      <article class="summary-card"><span class="summary-icon amber">✓</span><div><span class="summary-label">Finalizados</span><strong id="finished-count">—</strong></div></article>
+    </section>
+
+    <section class="workspace">
+      <div class="section-heading">
+        <div><h2>Directorio de proyectos</h2><p>Consulta y administra los registros de investigación.</p></div>
+        <button class="button button-quiet" id="refresh-projects" type="button" title="Actualizar lista">↻ Actualizar</button>
+      </div>
+      <div class="filters">
+        <label class="search-box"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Buscar por título, línea o investigador…" autocomplete="off"></label>
+        <label class="select-wrap"><span class="sr-only">Filtrar por estado</span><select id="status-filter"><option value="">Todos los estados</option><option value="propuesto">Propuesto</option><option value="en_evaluacion">En evaluación</option><option value="aprobado">Aprobado</option><option value="en_ejecucion">En ejecución</option><option value="finalizado">Finalizado</option><option value="cancelado">Cancelado</option></select></label>
+      </div>
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+      <div id="project-list" class="project-grid" aria-live="polite"></div>
+      <div id="empty-state" class="empty-state" hidden><span>⌕</span><h3>No hay proyectos para mostrar</h3><p>Prueba otra búsqueda o registra un nuevo proyecto.</p><button class="button button-primary" id="empty-new" type="button">Crear proyecto</button></div>
+    </section>
+    <footer>Seguimiento de proyectos de investigación <span>·</span> Facultad de Ingeniería</footer>
+  </main>
+
+  <dialog id="project-dialog" class="project-dialog">
+    <form id="project-form" novalidate>
+      <div class="dialog-heading"><div><p class="eyebrow">REGISTRO DE INVESTIGACIÓN</p><h2 id="dialog-title">Nuevo proyecto</h2></div><button class="icon-button" id="close-dialog" type="button" aria-label="Cerrar">×</button></div>
+      <div id="form-error" class="form-error" role="alert" hidden></div>
+      <input id="project-id" type="hidden">
+      <div class="form-grid">
+        <label class="field field-wide">Título del proyecto<input name="titulo" maxlength="180" required placeholder="Ej. Monitoreo de calidad del agua"></label>
+        <label class="field field-wide">Resumen<textarea name="resumen" required rows="3" placeholder="Describe brevemente el objetivo del proyecto"></textarea></label>
+        <label class="field">Línea de investigación<input name="linea_investigacion" maxlength="120" required placeholder="Tecnología ambiental"></label>
+        <label class="field">Investigador principal<input name="investigador_principal" maxlength="140" required placeholder="Nombre y apellido"></label>
+        <label class="field">Facultad<input name="facultad" maxlength="140" required placeholder="Facultad responsable"></label>
+        <label class="field">Estado<select name="estado" required><option value="propuesto">Propuesto</option><option value="en_evaluacion">En evaluación</option><option value="aprobado">Aprobado</option><option value="en_ejecucion">En ejecución</option><option value="finalizado">Finalizado</option><option value="cancelado">Cancelado</option></select></label>
+        <label class="field">Fecha de inicio<input name="fecha_inicio" type="date" required></label>
+        <label class="field">Fecha de fin <span class="optional">(opcional)</span><input name="fecha_fin" type="date"></label>
+        <label class="field field-wide">Avance <span class="range-value"><output id="progress-output">0</output>%</span><input name="porcentaje_avance" type="range" min="0" max="100" step="1" value="0"></label>
+      </div>
+      <div class="dialog-actions"><button class="button button-quiet" id="cancel-dialog" type="button">Cancelar</button><button class="button button-primary" id="save-project" type="submit">Guardar proyecto</button></div>
+    </form>
+  </dialog>
+</body>
+</html>

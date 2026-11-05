@@ -1,0 +1,69 @@
+{
+  "info": {
+    "name": "Seguimiento de proyectos de investigacion",
+    "description": "Coleccion para validar los endpoints CRUD de la practica. Completa el controlador antes de ejecutarla.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "proyectoId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Listar proyectos (GET 200)",
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/proyectos" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));", "pm.test('Respuesta JSON', () => pm.response.to.have.header('Content-Type', /application\\/json/));", "pm.test('El cuerpo es un arreglo', () => pm.expect(pm.response.json()).to.be.an('array'));"] } }]
+    },
+    {
+      "name": "Obtener proyecto (GET 200)",
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/proyectos/{{proyectoId}}" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));", "pm.test('Respuesta JSON', () => pm.response.to.have.header('Content-Type', /application\\/json/));"] } }]
+    },
+    {
+      "name": "Crear proyecto (POST 201)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"titulo\": \"Evaluacion de herramientas digitales para investigacion\",\n  \"resumen\": \"Estudio sobre herramientas de apoyo para equipos de investigacion universitaria.\",\n  \"linea_investigacion\": \"Innovacion educativa\",\n  \"investigador_principal\": \"Maria Quispe\",\n  \"facultad\": \"Ingenieria de Sistemas\",\n  \"fecha_inicio\": \"2026-11-05\",\n  \"fecha_fin\": \"2027-06-30\",\n  \"estado\": \"propuesto\",\n  \"porcentaje_avance\": 0\n}" },
+        "url": "{{baseUrl}}/api/proyectos"
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('HTTP 201', () => pm.response.to.have.status(201));", "pm.test('Respuesta JSON', () => pm.response.to.have.header('Content-Type', /application\\/json/));", "if (pm.response.code === 201 && pm.response.json().id) pm.collectionVariables.set('proyectoId', pm.response.json().id);"] } }]
+    },
+    {
+      "name": "Actualizar proyecto (PUT 200)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"titulo\": \"Evaluacion de herramientas digitales para investigacion\",\n  \"resumen\": \"Estudio con fase de entrevistas y analisis de resultados.\",\n  \"linea_investigacion\": \"Innovacion educativa\",\n  \"investigador_principal\": \"Maria Quispe\",\n  \"facultad\": \"Ingenieria de Sistemas\",\n  \"fecha_inicio\": \"2026-11-05\",\n  \"fecha_fin\": \"2027-06-30\",\n  \"estado\": \"en_ejecucion\",\n  \"porcentaje_avance\": 15\n}" },
+        "url": "{{baseUrl}}/api/proyectos/{{proyectoId}}"
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));", "pm.test('Respuesta JSON', () => pm.response.to.have.header('Content-Type', /application\\/json/));"] } }]
+    },
+    {
+      "name": "Proyecto inexistente (GET 404)",
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/proyectos/99999999" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('HTTP 404', () => pm.response.to.have.status(404));", "pm.test('Respuesta JSON', () => pm.response.to.have.header('Content-Type', /application\\/json/));"] } }]
+    },
+    {
+      "name": "Datos invalidos (POST 400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"titulo\": \"\",\n  \"resumen\": \"Prueba de validacion\",\n  \"linea_investigacion\": \"Sistemas\",\n  \"investigador_principal\": \"Estudiante\",\n  \"facultad\": \"Ingenieria\",\n  \"fecha_inicio\": \"2026-11-05\",\n  \"estado\": \"propuesto\",\n  \"porcentaje_avance\": 0\n}" },
+        "url": "{{baseUrl}}/api/proyectos"
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('HTTP 400', () => pm.response.to.have.status(400));", "pm.test('Respuesta JSON', () => pm.response.to.have.header('Content-Type', /application\\/json/));"] } }]
+    },
+    {
+      "name": "Fallo de base de datos (GET 500, prueba controlada)",
+      "description": "Prueba opcional: detén el servicio MySQL, deja la API en ejecución y envía esta petición. Inicia MySQL de nuevo al terminar.",
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/proyectos" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('HTTP 500 cuando MySQL no esta disponible', () => pm.response.to.have.status(500));", "pm.test('Respuesta JSON', () => pm.response.to.have.header('Content-Type', /application\\/json/));"] } }]
+    },
+    {
+      "name": "Eliminar proyecto (DELETE 200)",
+      "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/proyectos/{{proyectoId}}" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));", "pm.test('Respuesta JSON', () => pm.response.to.have.header('Content-Type', /application\\/json/));"] } }]
+    }
+  ]
+}

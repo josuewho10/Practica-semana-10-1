@@ -1,0 +1,17 @@
+{
+  "name": "api-seguimiento-proyectos-investigacion",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API REST para el seguimiento de proyectos de investigacion",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.14.0"
+  }
+}
